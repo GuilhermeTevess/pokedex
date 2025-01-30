@@ -97,6 +97,28 @@ const TypeBadge = styled.span`
   text-transform: capitalize;
 `;
 
+const typeColors: Record<string, string> = {
+  grass: "#78c850",
+  fire: "#f08030",
+  water: "#6890f0",
+  bug: "#a8b820",
+  normal: "#a8a878",
+  poison: "#a040a0",
+  electric: "#f8d030",
+  ground: "#e0c068",
+  fairy: "#ee99ac",
+  fighting: "#c03028",
+  psychic: "#f85888",
+  rock: "#b8a038",
+  ghost: "#705898",
+  ice: "#98d8d8",
+  dragon: "#7038f8",
+  dark: "#705848",
+  steel: "#b8b8d0",
+  flying: "#a890f0",
+};
+
+
 export default function Home() {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]); // Inicializa como array vazio
   const [searchQuery, setSearchQuery] = useState("");
@@ -107,30 +129,32 @@ export default function Home() {
     async function fetchPokemon() {
       try {
         const query = gql`
-          query ExampleQuery($sort: [String]) {
-            pokemons(sort: $sort) {
+        query ExampleQuery($sort: [String], $limit: Int) {
+          pokemons(sort: $sort, pagination: { limit: $limit }) {
+            name
+            num
+            height
+            experience
+            types {
+              color
               name
-              num
-              height
-              experience
-              types {
-                color
-                name
-              }
-              sprite {
-                url
-              }
+            }
+            sprite {
+              url
             }
           }
-        `;
+        }
+      `;
+
         const data = await request<PokemonData>(
           "http://localhost:1337/graphql",
           query,
-          { sort: ["num"] },
+          { sort: ["num"], limit: 1000 },
           {
-            Authorization: "Bearer <your-token>",
+            Authorization: "Bearer ecb8eb534cce571194da0654d39c8408a10168dcd5872c441d06dab68d70a4ab7b66d1a3c09a99fdf5e6edf51c04984680781e00f933ad4e723d637cf50e90fe996839bf11d9b6c12d695071934d794b079ec1ada3756570b467409678e4b63749cf44a3ce2f73f0051b4c650751313c49f0ac638211fc742f479a96a7b49a74",
           }
         );
+
         if (data) {
           const sortedPokemon = data.pokemons;
           setPokemon(sortedPokemon);
@@ -176,9 +200,10 @@ export default function Home() {
                 <Name>{pokemon.name}</Name>
                 <Types>
                   {pokemon.types.map((typeInfo) => (
-                    <TypeBadge key={typeInfo.name} color={typeInfo.color}>
-                      {typeInfo.name}
+                    <TypeBadge key={typeInfo.name} color={typeColors[typeInfo.name.toLowerCase()] || "#ddd"}>
+                    {typeInfo.name}
                     </TypeBadge>
+                  
                   ))}
                 </Types>
               </Card>

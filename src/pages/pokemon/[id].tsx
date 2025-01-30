@@ -1,7 +1,9 @@
-import { useRouter } from 'next/router';
-import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { gql, request } from "graphql-request";
 
+// Definição dos tipos
 interface TypeInfo {
   name: string;
   color: string;
@@ -9,7 +11,7 @@ interface TypeInfo {
 
 interface Pokemon {
   name: string;
-  num: number;
+  num: string; // Alterado para string
   height: number;
   weight: number;
   experience: number;
@@ -19,6 +21,11 @@ interface Pokemon {
   };
 }
 
+interface PokemonData {
+  pokemons: Pokemon[];
+}
+
+// Estilos
 const Container = styled.div`
   max-width: 600px;
   margin: 0 auto;
@@ -31,7 +38,6 @@ const Container = styled.div`
 
 const Image = styled.img`
   width: 200px;
-  color: black;
   height: 200px;
   object-fit: contain;
 `;
@@ -48,8 +54,8 @@ const Types = styled.div`
   margin-top: 10px;
 `;
 
-const TypeBadge = styled.span`
-  background-color: ${(props) => props.color || '#ddd'};
+const TypeBadge = styled.span<{ color: string }>`
+  background-color: ${(props) => props.color || "#ddd"};
   color: white;
   padding: 5px 15px;
   border-radius: 12px;
@@ -66,51 +72,93 @@ const Stats = styled.div`
   }
 `;
 
-const typeColors = {
-  grass: '#78c850',
-  fire: '#f08030',
-  water: '#6890f0',
-  bug: '#a8b820',
-  normal: '#a8a878',
-  poison: '#a040a0',
-  electric: '#f8d030',
-  ground: '#e0c068',
-  fairy: '#ee99ac',
-  fighting: '#c03028',
-  psychic: '#f85888',
-  rock: '#b8a038',
-  ghost: '#705898',
-  ice: '#98d8d8',
-  dragon: '#7038f8',
-  dark: '#705848',
-  steel: '#b8b8d0',
-  flying: '#a890f0',
+const typeColors: Record<string, string> = {
+  grass: "#78c850",
+  fire: "#f08030",
+  water: "#6890f0",
+  bug: "#a8b820",
+  normal: "#a8a878",
+  poison: "#a040a0",
+  electric: "#f8d030",
+  ground: "#e0c068",
+  fairy: "#ee99ac",
+  fighting: "#c03028",
+  psychic: "#f85888",
+  rock: "#b8a038",
+  ghost: "#705898",
+  ice: "#98d8d8",
+  dragon: "#7038f8",
+  dark: "#705848",
+  steel: "#b8b8d0",
+  flying: "#a890f0",
 };
-
-// Tipo das chaves do tipoColors
-type TypeColors = keyof typeof typeColors;
 
 export default function PokemonDetail() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // Obtém o ID da URL
 
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPokemon() {
-      if (!id) return;
-      const res = await fetch(`http://localhost:1337/api/pokemons?fields=name%2Cheight%2Cweight%2Cexperience&populate=types&populate=sprite&filters%5Bnum%5D=${id}`, {
-        headers: {
-          Authorization: "Bearer <your-token>"
+      if (!id) return; // Garante que o ID foi carregado
+
+      try {
+        // 🔹 Buscar TODOS os Pokémons e filtrar no frontend
+        const query = gql`
+          query GetAllPokemons {
+            pokemons {
+              name
+              num
+              height
+              weight
+              experience
+              types {
+                name
+                color
+              }
+              sprite {
+                url
+              }
+            }
+          }
+        `;
+
+        const data = await request<PokemonData>(
+          "http://localhost:1337/graphql",
+          query,
+          {},
+          {
+            Authorization:
+              "Bearer ecb8eb534cce571194da0654d39c8408a10168dcd5872c441d06dab68d70a4ab7b66d1a3c09a99fdf5e6edf51c04984680781e00f933ad4e723d637cf50e90fe996839bf11d9b6c12d695071934d794b079ec1ada3756570b467409678e4b63749cf44a3ce2f73f0051b4c650751313c49f0ac638211fc742f479a96a7b49a74",
+          }
+        );
+
+        if (data && data.pokemons.length > 0) {
+          // 🔹 Filtrar o Pokémon pelo número (ID)
+          const foundPokemon = data.pokemons.find(
+            (poke) => String(poke.num) === String(id)
+          );
+
+          if (foundPokemon) {
+            setPokemon(foundPokemon);
+          } else {
+            setError("Pokémon não encontrado.");
+          }
+        } else {
+          setError("Nenhum Pokémon encontrado.");
         }
-      });
-      const data = await res.json();
-      setPokemon(data.data[0]);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : "Erro desconhecido");
+      }
     }
+
     fetchPokemon();
   }, [id]);
 
-  if (!pokemon) return <div>Loading...</div>;
+  if (error) return <div>Erro: {error}</div>;
+  if (!pokemon) return <div>Carregando...</div>;
 
   return (
     <Container>
@@ -118,16 +166,19 @@ export default function PokemonDetail() {
       <Name>{pokemon.name}</Name>
       <Types>
         {pokemon.types.map((typeInfo) => (
-          // A chave é garantida para ser uma chave válida de typeColors
-          <TypeBadge key={typeInfo.name} color={typeColors[typeInfo.name as TypeColors] || '#ddd'}>
-            {typeInfo.name}
-          </TypeBadge>
+          <TypeBadge
+          key={typeInfo.name}
+          color={typeColors[typeInfo.name.toLowerCase()] || "#ddd"}
+        >
+          {typeInfo.name}
+        </TypeBadge>
+        
         ))}
       </Types>
       <Stats>
-        <p>Height: {pokemon.height} m</p>
-        <p>Weight: {pokemon.weight} kg</p>
-        <p>Base Experience: {pokemon.experience}</p>
+        <p>Altura: {pokemon.height} m</p>
+        <p>Peso: {pokemon.weight} kg</p>
+        <p>Experiência Base: {pokemon.experience}</p>
       </Stats>
     </Container>
   );

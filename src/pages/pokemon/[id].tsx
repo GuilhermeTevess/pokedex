@@ -9,12 +9,22 @@ interface TypeInfo {
   color: string;
 }
 
+interface Stats {
+  hp: number;
+  attack: number;
+  defense: number;
+  special_attack: number;
+  special_defense: number;
+  speed: number;
+}
+
 interface Pokemon {
   name: string;
   num: string; // Alterado para string
   height: number;
   weight: number;
   experience: number;
+  stats: Stats;
   types: TypeInfo[];
   sprite: {
     url: string;
@@ -62,7 +72,7 @@ const TypeBadge = styled.span<{ color: string }>`
   font-size: 0.9rem;
 `;
 
-const Stats = styled.div`
+const PokemonStats = styled.div`
   margin-top: 20px;
   text-align: left;
   color: black;
@@ -114,6 +124,14 @@ export default function PokemonDetail() {
               height
               weight
               experience
+              stats {
+                hp
+                attack
+                defense
+                special_attack
+                special_defense
+                speed
+              }
               types {
                 name
                 color
@@ -167,19 +185,24 @@ export default function PokemonDetail() {
       <Types>
         {pokemon.types.map((typeInfo) => (
           <TypeBadge
-          key={typeInfo.name}
-          color={typeColors[typeInfo.name.toLowerCase()] || "#ddd"}
-        >
-          {typeInfo.name}
-        </TypeBadge>
-        
+            key={typeInfo.name}
+            color={typeColors[typeInfo.name.toLowerCase()] || "#ddd"}
+          >
+            {typeInfo.name}
+          </TypeBadge>
         ))}
       </Types>
-      <Stats>
+      <PokemonStats>
+        <p>HP: {pokemon.stats.hp}</p>
+        <p>Ataque: {pokemon.stats.attack}</p>
+        <p>Defesa: {pokemon.stats.defense}</p>
+        <p>Ataque Especial: {pokemon.stats.special_attack}</p>
+        <p>Defesa Especial: {pokemon.stats.special_defense}</p>
+        <p>Velocidade: {pokemon.stats.speed}</p>
         <p>Altura: {pokemon.height} m</p>
         <p>Peso: {pokemon.weight} kg</p>
         <p>Experiência Base: {pokemon.experience}</p>
-      </Stats>
+      </PokemonStats>
     </Container>
   );
 }

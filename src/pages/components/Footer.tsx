@@ -1,16 +1,20 @@
 import styled from '@emotion/styled';
 
 const FooterContainer = styled.footer`
-  background-color: #ff1000;
+  background-color: #1e1e1e;
   color: #ffffff;
-  text-align: center;
-  padding: 10px 20px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 40px;
   font-family: 'Roboto', sans-serif;
+  border-top: 2px solid #333333;
+  margin-top: 40px;
 `;
 
-const Copyright = styled.p`
+const FooterText = styled.p`
   font-size: 0.9rem;
+  margin: 5px 0;
 `;
 
 const FooterLinks = styled.div`
@@ -19,10 +23,12 @@ const FooterLinks = styled.div`
   a {
     color: #ffffff;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+    margin: 0 8px;
 
     &:hover {
       text-decoration: underline;
+      color: #cccccc;
     }
   }
 `;
@@ -30,7 +36,7 @@ const FooterLinks = styled.div`
 export default function Footer() {
   return (
     <FooterContainer>
-      <Copyright>2024 Pokédex. Todos os direitos reservados.</Copyright>
+      <FooterText>2024 Pokédex. Todos os direitos reservados.</FooterText>
       <FooterLinks>
         <a href="/terms">Termos de Uso</a> | <a href="/privacy">Política de Privacidade</a>
       </FooterLinks>

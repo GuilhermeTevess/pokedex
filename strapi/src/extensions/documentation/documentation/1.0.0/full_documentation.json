@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-01-30T12:13:35.187Z"
+    "x-generation-date": "2025-02-07T08:55:14.928Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -4875,7 +4875,12 @@
               "height",
               "weight",
               "experience",
-              "stats"
+              "hp",
+              "atk",
+              "def",
+              "spatk",
+              "spdef",
+              "spd"
             ],
             "type": "object",
             "properties": {
@@ -4921,7 +4926,24 @@
               "experience": {
                 "type": "integer"
               },
-              "stats": {},
+              "hp": {
+                "type": "string"
+              },
+              "atk": {
+                "type": "string"
+              },
+              "def": {
+                "type": "string"
+              },
+              "spatk": {
+                "type": "string"
+              },
+              "spdef": {
+                "type": "string"
+              },
+              "spd": {
+                "type": "string"
+              },
               "locale": {
                 "type": "string"
               },
@@ -4987,7 +5009,12 @@
           "height",
           "weight",
           "experience",
-          "stats"
+          "hp",
+          "atk",
+          "def",
+          "spatk",
+          "spdef",
+          "spd"
         ],
         "properties": {
           "id": {
@@ -5659,7 +5686,24 @@
                       "experience": {
                         "type": "integer"
                       },
-                      "stats": {},
+                      "hp": {
+                        "type": "string"
+                      },
+                      "atk": {
+                        "type": "string"
+                      },
+                      "def": {
+                        "type": "string"
+                      },
+                      "spatk": {
+                        "type": "string"
+                      },
+                      "spdef": {
+                        "type": "string"
+                      },
+                      "spd": {
+                        "type": "string"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -5908,7 +5952,24 @@
           "experience": {
             "type": "integer"
           },
-          "stats": {},
+          "hp": {
+            "type": "string"
+          },
+          "atk": {
+            "type": "string"
+          },
+          "def": {
+            "type": "string"
+          },
+          "spatk": {
+            "type": "string"
+          },
+          "spdef": {
+            "type": "string"
+          },
+          "spd": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -6792,7 +6853,24 @@
                 "experience": {
                   "type": "integer"
                 },
-                "stats": {},
+                "hp": {
+                  "type": "string"
+                },
+                "atk": {
+                  "type": "string"
+                },
+                "def": {
+                  "type": "string"
+                },
+                "spatk": {
+                  "type": "string"
+                },
+                "spdef": {
+                  "type": "string"
+                },
+                "spd": {
+                  "type": "string"
+                },
                 "createdAt": {
                   "type": "string",
                   "format": "date-time"

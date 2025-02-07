@@ -589,9 +589,11 @@ export interface ApiTypeType extends Struct.CollectionTypeSchema {
       }>;
     pokemons: Schema.Attribute.Relation<'manyToMany', 'api::pokemon.pokemon'>;
     publishedAt: Schema.Attribute.DateTime;
+    types: Schema.Attribute.Relation<'manyToMany', 'api::type.type'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    weakness: Schema.Attribute.Relation<'manyToMany', 'api::type.type'>;
   };
 }
 

@@ -1,0 +1,21 @@
+export const typeColors: Record<string, string> = {
+    planta: "#78c850",
+    fogo: "#f08030",
+    água: "#6890f0",
+    inseto: "#a8b820",
+    normal: "#a8a878",
+    venenoso: "#a040a0",
+    elétrico: "#f8d030",
+    terra: "#e0c068",
+    fada: "#ee99ac",
+    lutador: "#c03028",
+    psíquico: "#f85888",
+    pedra: "#b8a038",
+    fantasma: "#705898",
+    gelo: "#98d8d8",
+    dragão: "#7038f8",
+    sombrio: "#705848",
+    aço: "#b8b8d0",
+    voador: "#a890f0",
+  };
+  

@@ -42,6 +42,18 @@
       "relation": "manyToMany",
       "target": "api::pokemon.pokemon",
       "mappedBy": "types"
+    },
+    "types": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::type.type",
+      "inversedBy": "weakness"
+    },
+    "weakness": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::type.type",
+      "mappedBy": "types"
     }
   }
 }

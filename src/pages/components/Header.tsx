@@ -56,7 +56,7 @@ export default function Header() {
     <HeaderContainer>
       <TitleButton href="/">Pokédex</TitleButton>
       <NavLinks>
-        <NavLink href="/moves">Movimentos</NavLink>
+        <NavLink href="/moves">Moves</NavLink>
         <Separator src="/imgs/pokebolabranca.png" alt="separator" />
         <NavLink href="/types">Tipos</NavLink>
         <Separator src="/imgs/pokebolabranca.png" alt="separator" />
